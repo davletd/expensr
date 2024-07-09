@@ -1,7 +1,7 @@
 // This is the root layout component for your Next.js app.
 // Learn more: https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#root-layout-required
 // import { Inter } from 'next/font/google'
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 // const fontHeading = Inter({
 //   subsets: ['latin'],

@@ -1,24 +1,29 @@
 import { Routes, Route, Link,  } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from 'react-query';
 import Landing from './components/landing'
 import Layout from './components/layout'
 import Login from './components/login';
 import Dashboard from './components/dashboard';
 import './App.css'
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Landing />} />
-          <Route path="login" element={<Login />} />
-          <Route path="dashboard" element={<Dashboard />} />
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Landing />} />
+            <Route path="login" element={<Login />} />
+            <Route path="dashboard" element={<Dashboard />} />
 
-          {/* Using path="*"" means "match anything", so this route
-                acts like a catch-all for URLs that we don't have explicit
-                routes for. */}
-          <Route path="*" element={<NoMatch />} />
-        </Route>
-      </Routes>
+            {/* Using path="*"" means "match anything", so this route
+                  acts like a catch-all for URLs that we don't have explicit
+                  routes for. */}
+            <Route path="*" element={<NoMatch />} />
+          </Route>
+        </Routes>
+    </QueryClientProvider>
   )
 }
 

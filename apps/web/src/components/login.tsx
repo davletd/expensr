@@ -1,13 +1,40 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/0U265SIgJAb
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+import React, { useState } from 'react';
+import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { Label } from "./label"
 import { Input } from "./input"
 import { Button } from "./button"
 
-export default function Component() {
+const Login: React.FC = () => {
+
+	const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+
+	const loginMutation = useMutation(
+    (credentials: { username: string; password: string }) =>
+      fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+      }).then((res) => res.json()),
+    {
+      onSuccess: (data) => {
+        localStorage.setItem('token', data.token);
+        navigate('/dashboard');
+      },
+			onError: (error) => {
+				console.error('Login failed', error);
+			}
+    }
+  );
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		loginMutation.mutate({ username, password });
+	};
+
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
@@ -22,7 +49,7 @@ export default function Component() {
             </a>
           </p>
         </div>
-        <form className="space-y-6" action="#" method="POST">
+        <form onSubmit={handleSubmit} className="space-y-6" action="#" method="POST">
           <div>
             <Label htmlFor="username" className="block text-sm font-medium text-muted-foreground">
               Username
@@ -31,6 +58,8 @@ export default function Component() {
               <Input
                 id="username"
                 name="username"
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
                 type="text"
                 autoComplete="username"
                 required
@@ -46,6 +75,8 @@ export default function Component() {
               <Input
                 id="password"
                 name="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 autoComplete="current-password"
                 required
@@ -56,6 +87,7 @@ export default function Component() {
           <div>
             <Button
               type="submit"
+							disabled={loginMutation.isLoading}
               className="flex w-full justify-center rounded-md bg-primary py-2 px-4 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               Sign in
@@ -66,3 +98,5 @@ export default function Component() {
     </div>
   )
 }
+
+export default Login;
