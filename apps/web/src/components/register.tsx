@@ -5,34 +5,34 @@ import { Label } from "./label"
 import { Input } from "./input"
 import { Button } from "./button"
 
-const Login: React.FC = () => {
+const Regoster: React.FC = () => {
 
 	const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
 
-	const loginMutation = useMutation(
-    (credentials: { username: string; password: string }) =>
-      fetch('/auth/login', {
+	const registerMutation = useMutation(
+    (credentials: { username: string; email: string, password: string }) =>
+      fetch('/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
       }).then((res) => res.json()),
     {
-      onSuccess: (data) => {
-        localStorage.setItem('token', data.token);
-        navigate('/dashboard');
+      onSuccess: () => {
+        navigate('/login');
       },
 			onError: (error) => {
-				console.error('Login failed', error);
+				console.error('Register failed', error);
 			}
     }
   );
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		loginMutation.mutate({ username, password });
+		registerMutation.mutate({ username, email, password });
 	};
 
   return (
@@ -40,12 +40,12 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-foreground">
-            Sign in to your account
+            Register for a new account
           </h2>
           <p className="mt-2 text-center text-sm text-muted-foreground">
             Or{" "}
-            <a href="/register" className="font-medium text-primary hover:text-primary/80">
-              register for a new account
+            <a href="/login" className="font-medium text-primary hover:text-primary/80">
+              sign in to your account
             </a>
           </p>
         </div>
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
                 id="username"
                 name="username"
 								value={username}
-								onChange={(e) => setUsername(e.target.value)}
+								onChange={(e) => {setUsername(e.target.value); setEmail(e.target.value)}}
                 type="text"
                 autoComplete="username"
                 required
@@ -87,10 +87,10 @@ const Login: React.FC = () => {
           <div>
             <Button
               type="submit"
-							disabled={loginMutation.isLoading}
+							disabled={registerMutation.isLoading}
               className="flex w-full justify-center rounded-md bg-primary py-2 px-4 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
-              Sign in
+              {registerMutation.isLoading ? 'Registering...' : 'Register'}
             </Button>
           </div>
         </form>
@@ -99,4 +99,4 @@ const Login: React.FC = () => {
   )
 }
 
-export default Login;
+export default Regoster;

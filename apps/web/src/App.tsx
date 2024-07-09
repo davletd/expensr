@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import Landing from './components/landing'
 import Layout from './components/layout'
 import Login from './components/login';
+import Register from './components/register';
 import Dashboard from './components/dashboard';
 import './App.css'
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
             <Route path="dashboard" element={<Dashboard />} />
 
             {/* Using path="*"" means "match anything", so this route

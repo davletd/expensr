@@ -22,7 +22,7 @@ export class AuthController {
       return res.status(409).send('Email already in use');
     }
 
-    return res.status(201).send('User created');
+    return res.status(201).json('User created');
   };
 
   static login = async (req: Request, res: Response) => {
