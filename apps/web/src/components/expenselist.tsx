@@ -39,7 +39,7 @@ const ExpenseList: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-							{expenses?.map((expense) => (
+							{expenses?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((expense) => (
                 <TableRow key={expense.id}>
                   <TableCell>{format(expense.date, 'dd-MM-yyyy')}</TableCell>
                   <TableCell>${expense.amount}</TableCell>
