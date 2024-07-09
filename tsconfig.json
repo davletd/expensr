@@ -9,8 +9,8 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./apps"
   },
-  "include": ["src/**/*"],
+  "include": ["apps/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
