@@ -6,24 +6,24 @@ import { User } from './User';
 @Entity()
 export class Expense {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column()
   @IsDate()
-  date: Date;
+  date!: Date;
 
   @Column()
   @IsNumber()
-  amount: number;
+  amount!: number;
 
   @Column()
   @IsString()
-  category: string;
+  category!: string;
 
   @Column()
   @IsString()
-  description: string;
+  description!: string;
 
   @ManyToOne(() => User, (user) => user.expenses)
-  user: User;
+  user!: User;
 }
