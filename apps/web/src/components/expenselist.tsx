@@ -1,5 +1,9 @@
 import React from 'react';
 import { useQuery } from 'react-query';
+import { format } from 'date-fns';
+import { Card, CardHeader, CardTitle, CardContent } from "./card"
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "./table"
+import { Badge } from "./badge"
 
 interface Expense {
   id: number;
@@ -18,17 +22,37 @@ const ExpenseList: React.FC = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred</div>;
-
   return (
     <div>
-      <h2>Expenses</h2>
-      <ul>
-        {expenses?.map((expense) => (
-          <li key={expense.id}>
-            {expense.date} - {expense.category}: ${expense.amount} ({expense.description})
-          </li>
-        ))}
-      </ul>
+					<Card>
+          <CardHeader>
+            <CardTitle>Expenses</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Description</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+							{expenses?.map((expense) => (
+                <TableRow key={expense.id}>
+                  <TableCell>{format(expense.date, 'dd-MM-yyyy')}</TableCell>
+                  <TableCell>${expense.amount}</TableCell>
+                  <TableCell>
+                    <Badge variant="secondary">{expense.category}</Badge>
+                  </TableCell>
+                  <TableCell>{expense.description}</TableCell>
+                </TableRow>
+							))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
     </div>
   );
 }
