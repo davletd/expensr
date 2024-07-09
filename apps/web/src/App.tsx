@@ -5,6 +5,7 @@ import Layout from './components/layout'
 import Login from './components/login';
 import Register from './components/register';
 import Dashboard from './components/dashboard';
+import ExpenseList from "./components/expenselist";
 import './App.css'
 
 const queryClient = new QueryClient();
@@ -18,6 +19,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="expenses" element={<ExpenseList />} />
 
             {/* Using path="*"" means "match anything", so this route
                   acts like a catch-all for URLs that we don't have explicit
