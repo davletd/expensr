@@ -13,11 +13,11 @@ export default function Component() {
           <span className="sr-only">Expense Tracker</span>
         </a>
         <div className="ml-auto flex gap-4 sm:gap-6">
-          <a href="#" className="text-sm font-medium hover:underline underline-offset-4">
+          <a href="/login" className="text-sm font-medium hover:underline underline-offset-4">
             Log In
           </a>
           <a
-            href="#"
+            href="/register"
             className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
           >
             Sign Up
@@ -39,14 +39,14 @@ export default function Component() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <a
-                    href="#"
+                    href="/register"
                     className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                   
                   >
                     Sign Up
                   </a>
                   <a
-                    href="#"
+                    href="/login"
                     className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                   
                   >
