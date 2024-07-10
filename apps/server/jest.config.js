@@ -8,4 +8,12 @@ module.exports = {
   moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx', 'json', 'node'],
 	modulePathIgnorePatterns: ['./dist/'],
 	transformIgnorePatterns: ['./node_modules/'],
+	collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/index.ts',
+  ],
 };
