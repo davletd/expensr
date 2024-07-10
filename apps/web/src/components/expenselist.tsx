@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { format } from 'date-fns';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "./table"
 import { Badge } from "./badge"
 import { DatePickerWithRange } from './datepicker';
+import { DateRange } from "react-day-picker"
 
 interface Expense {
   id: number;
@@ -14,6 +15,7 @@ interface Expense {
 }
 
 const ExpenseList: React.FC = () => {
+	const [dateRange, setDateRange] = useState<DateRange>();
   const { data: expenses, isLoading, error } = useQuery<Expense[]>('expenses', () =>
     fetch('/api/expenses', {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -22,10 +24,17 @@ const ExpenseList: React.FC = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred</div>;
+
+	const filteredExpenses = expenses?.filter(expense => {
+    if (!dateRange?.from || !dateRange.to) return true; // If no date range is selected, return all expenses
+    const expenseDate = new Date(expense.date);
+    return expenseDate >= dateRange.from && expenseDate <= dateRange.to;
+  });
+
   return (
 		<>
 			<div className="absolute top-4 right-4 text-white p-4 rounded">
-				<DatePickerWithRange className="md:w-1/3" />
+				<DatePickerWithRange className="md:w-1/3" onDateChange={(range: DateRange | undefined) => setDateRange(range)}/>
 			</div>
 			<div className="rounded-md border">
 							<Table>
@@ -38,7 +47,7 @@ const ExpenseList: React.FC = () => {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-								{expenses?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((expense) => (
+								{filteredExpenses?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((expense) => (
 									<TableRow key={expense.id}>
 										<TableCell>{format(expense.date, 'dd-MM-yyyy')}</TableCell>
 										<TableCell>${expense.amount}</TableCell>
