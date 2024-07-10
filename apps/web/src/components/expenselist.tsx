@@ -5,6 +5,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from ".
 import { Badge } from "./badge"
 import { DatePickerWithRange } from './datepicker';
 import { DateRange } from "react-day-picker"
+import { Combobox } from './combobox';
 
 interface Expense {
   id: number;
@@ -16,24 +17,34 @@ interface Expense {
 
 const ExpenseList: React.FC = () => {
 	const [dateRange, setDateRange] = useState<DateRange>();
+	const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+	
   const { data: expenses, isLoading, error } = useQuery<Expense[]>('expenses', () =>
     fetch('/api/expenses', {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     }).then((res) => res.json())
   );
 
+	const categories = expenses ? Array.from(new Set(expenses.map(expense => expense.category))).map(category => ({ value: category, label: category })) : [];
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred</div>;
 
 	const filteredExpenses = expenses?.filter(expense => {
-    if (!dateRange?.from || !dateRange.to) return true; // If no date range is selected, return all expenses
     const expenseDate = new Date(expense.date);
-    return expenseDate >= dateRange.from && expenseDate <= dateRange.to;
+    const dateMatch = !dateRange?.from || !dateRange?.to || (expenseDate >= dateRange.from && expenseDate <= dateRange.to);
+    const categoryMatch = !selectedCategory || expense.category === selectedCategory;
+    return dateMatch && categoryMatch;
   });
 
   return (
 		<>
 			<div className="absolute top-4 right-4 text-white p-4 rounded">
+				<Combobox 
+						options={categories} 
+						onSelect={(category: string) => setSelectedCategory(category)} 
+						placeholder="Select Category"
+					/>
 				<DatePickerWithRange className="md:w-1/3" onDateChange={(range: DateRange | undefined) => setDateRange(range)}/>
 			</div>
 			<div className="rounded-md border">
