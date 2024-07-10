@@ -1,8 +1,9 @@
-// src/controllers/expenseController.ts
+
 import { Request, Response } from 'express';
 import { AppDataSource } from '../ormconfig';
 import { Expense } from '../entities/Expense';
-import { detectSpendingSpike } from '../analytics/spending';
+import { detectSpendingSpike } from '../utils/analytics/spending';
+import { generateMonthlyReport } from '../utils/reports/spending';
 
 export class ExpenseController {
   static getExpenses = async (req: Request, res: Response) => {
@@ -112,5 +113,16 @@ export class ExpenseController {
 
     const spikeDetected = await detectSpendingSpike(userId, Number(days), Number(threshold));
     return res.status(200).json({ spikeDetected });
+  };
+
+  static getMonthlyReport = async (req: Request, res: Response) => {
+    const userId = res.locals.jwtPayload.userId;
+
+    try {
+      const report = await generateMonthlyReport(userId);
+      return res.status(200).json(report);
+    } catch (error: any) {
+      return res.status(500).json({ message: 'Failed to generate report', error: error.message });
+    }
   };
 }

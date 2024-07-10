@@ -11,5 +11,6 @@ router.put('/expenses/:id', [checkJwt], ExpenseController.updateExpense);
 router.delete('/expenses/:id', [checkJwt], ExpenseController.deleteExpense);
 router.get('/expenses/summary', [checkJwt], ExpenseController.getSummary);
 router.get('/expenses/spike', [checkJwt], ExpenseController.checkSpendingSpike);
+router.get('/expenses/report', [checkJwt], ExpenseController.getMonthlyReport);
 
 export default router;

@@ -1,7 +1,7 @@
-// src/utils/spendingAnalysis.ts
-import { Expense } from '../entities/Expense';
+
+import { Expense } from '../../entities/Expense';
 import { Between, Repository } from 'typeorm';
-import { AppDataSource } from '../ormconfig';
+import { AppDataSource } from '../../ormconfig';
 
 const expenseRepository = AppDataSource.getRepository(Expense);
 
