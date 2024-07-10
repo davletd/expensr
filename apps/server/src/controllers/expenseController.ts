@@ -9,7 +9,26 @@ export class ExpenseController {
     const userId = res.locals.jwtPayload.userId;
     const expenseRepository = AppDataSource.getRepository(Expense);
 
-    const expenses = await expenseRepository.find({ where: { user: { id: userId } } });
+    const { category, startDate, endDate } = req.query;
+
+    console.log("category:", category, startDate, endDate);
+    console.log("date", new Date(startDate as string))
+    const queryBuilder = expenseRepository.createQueryBuilder('expense')
+      .where('expense.userId = :userId', { userId });
+
+    if (category) {
+      queryBuilder.andWhere('expense.category = :category', { category });
+    }
+
+    if (startDate) {
+      queryBuilder.andWhere('expense.date >= :startDate', { startDate: new Date(startDate as string) });
+    }
+
+    if (endDate) {
+      queryBuilder.andWhere('expense.date <= :endDate', { endDate: new Date(endDate as string) });
+    }
+
+    const expenses = await queryBuilder.getMany();
     return res.status(200).json(expenses);
   };
 
