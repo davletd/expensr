@@ -1,9 +1,9 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { format } from 'date-fns';
-import { Card, CardHeader, CardTitle, CardContent } from "./card"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "./table"
 import { Badge } from "./badge"
+import { DatePickerWithRange } from './datepicker';
 
 interface Expense {
   id: number;
@@ -23,37 +23,35 @@ const ExpenseList: React.FC = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred</div>;
   return (
-    <div>
-					<Card>
-          <CardHeader>
-            <CardTitle>Expenses</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Description</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-							{expenses?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((expense) => (
-                <TableRow key={expense.id}>
-                  <TableCell>{format(expense.date, 'dd-MM-yyyy')}</TableCell>
-                  <TableCell>${expense.amount}</TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">{expense.category}</Badge>
-                  </TableCell>
-                  <TableCell>{expense.description}</TableCell>
-                </TableRow>
-							))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-    </div>
+		<>
+			<div className="absolute top-4 right-4 text-white p-4 rounded">
+				<DatePickerWithRange className="md:w-1/3" />
+			</div>
+			<div className="rounded-md border">
+							<Table>
+								<TableHeader>
+									<TableRow>
+										<TableHead>Date</TableHead>
+										<TableHead>Amount</TableHead>
+										<TableHead>Category</TableHead>
+										<TableHead>Description</TableHead>
+									</TableRow>
+								</TableHeader>
+								<TableBody>
+								{expenses?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((expense) => (
+									<TableRow key={expense.id}>
+										<TableCell>{format(expense.date, 'dd-MM-yyyy')}</TableCell>
+										<TableCell>${expense.amount}</TableCell>
+										<TableCell>
+											<Badge variant="secondary">{expense.category}</Badge>
+										</TableCell>
+										<TableCell>{expense.description}</TableCell>
+									</TableRow>
+								))}
+								</TableBody>
+							</Table>
+			</div>
+	</>
   );
 }
 

@@ -90,3 +90,10 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.popover-content {
+  z-index: 50; /* Ensure it is above other content */
+  position: absolute;
+  width: auto;
+  padding: 0;
+}
