@@ -91,8 +91,11 @@ export class ExpenseController {
       .select('expense.category', 'category')
       .addSelect('SUM(expense.amount)', 'totalAmount')
       .where('expense.userId = :userId', { userId })
-      .andWhere('expense.date BETWEEN :startDate AND :endDate', { startDate, endDate })
-      .groupBy('expense.category');
+
+    if (startDate && endDate ) {
+      query.andWhere('expense.date BETWEEN :startDate AND :endDate', { startDate, endDate })
+    }
+    query.groupBy('expense.category');
 
     const summary = await query.getRawMany();
     return res.status(200).json(summary);
