@@ -9,15 +9,66 @@ import swaggerJSDoc from 'swagger-jsdoc';
 const app = express();
 
 const swaggerOptions = {
-  swaggerDefinition: {
+  definition: {
     openapi: '3.0.0',
     info: {
       title: 'Expense Tracker API',
       version: '1.0.0',
       description: 'API documentation for Expense Tracker',
     },
+    servers: [
+      {
+        url: 'http://localhost:3000/api',
+        description: 'Local server',
+      },
+    ],
+    components: {
+      schemas: {
+        Expense: {
+          type: 'object',
+          required: ['date', 'amount', 'category', 'description'],
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            date: {
+              type: 'string',
+              format: 'date',
+              example: '2023-07-01',
+            },
+            amount: {
+              type: 'number',
+              example: 50,
+            },
+            category: {
+              type: 'string',
+              example: 'Food',
+            },
+            description: {
+              type: 'string',
+              example: 'Lunch',
+            },
+            userId: {
+              type: 'integer',
+              example: 1,
+            },
+          },
+        },
+      },
+    },
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
   },
-  apis: ['./src/routes/*.ts'],
+  apis: ['./src/routes/*.ts', './src/controllers/*.ts', './src/entities/*.ts'],
+  security: [{
+    bearerAuth: [],
+  }],
 };
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
