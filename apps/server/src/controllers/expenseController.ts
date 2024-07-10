@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../ormconfig';
 import { Expense } from '../entities/Expense';
+import { detectSpendingSpike } from '../analytics/spending';
 
 export class ExpenseController {
   static getExpenses = async (req: Request, res: Response) => {
@@ -99,5 +100,17 @@ export class ExpenseController {
 
     const summary = await query.getRawMany();
     return res.status(200).json(summary);
+  };
+
+  static checkSpendingSpike = async (req: Request, res: Response) => {
+    const userId = res.locals.jwtPayload.userId;
+    const { days, threshold } = req.query;
+
+    if (!days || !threshold) {
+      return res.status(400).json({ message: 'Missing required query parameters: days and threshold' });
+    }
+
+    const spikeDetected = await detectSpendingSpike(userId, Number(days), Number(threshold));
+    return res.status(200).json({ spikeDetected });
   };
 }
